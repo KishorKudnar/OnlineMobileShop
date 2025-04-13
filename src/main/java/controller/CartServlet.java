@@ -31,8 +31,28 @@ public class CartServlet extends HttpServlet {
             return;
         }
 
-        out.println("<html><head><title>Cart</title><link rel='stylesheet' href='/style.css'></head><body>");
-        out.println("<header><nav>" + getNavBar(user) + "</nav></header><div class='container'>");
+        out.println("<html><head><title>Cart</title>");
+        out.println("<style>");
+        out.println("body { font-family: Arial, sans-serif; margin: 0; background: #f8f9fa; }");
+        out.println("header { background-color: #343a40; padding: 15px 0; }");
+        out.println("nav ul { list-style: none; margin: 0; padding: 0; display: flex; justify-content: center; }");
+        out.println("nav li { margin: 0 15px; }");
+        out.println("nav a { color: white; text-decoration: none; padding: 10px 15px; background-color: #495057; border-radius: 5px; }");
+        out.println("nav a:hover { background-color: #2980b9; }");
+        out.println(".container { max-width: 900px; margin: 30px auto; padding: 20px; background: #ffffff; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }");
+        out.println("h1 { text-align: center; color: #343a40; }");
+        out.println(".cart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px; }");
+        out.println(".cart-item { padding: 20px; background-color: #e9ecef; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }");
+        out.println(".cart-item h3 { margin-top: 0; color: #212529; }");
+        out.println(".cart-item p { margin: 8px 0; color: #495057; }");
+        out.println("form button { margin-top: 20px; padding: 12px 24px; font-size: 16px; background-color: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; }");
+        out.println("form button:hover { background-color: #0056b3; }");
+        out.println("a { color: #007bff; }");
+        out.println("a:hover { text-decoration: underline; }");
+        out.println("</style></head><body>");
+
+        out.println("<header><nav>" + getNavBar(user) + "</nav></header>");
+        out.println("<div class='container'>");
         out.println("<h1>Your Cart</h1>");
 
         List<OrderItem> cart = (List<OrderItem>) session.getAttribute("cart");
@@ -53,8 +73,9 @@ public class CartServlet extends HttpServlet {
                 out.println("</div>");
             }
             out.println("</div>");
-            out.println("<p><strong>Cart Total: ₹" + cartTotal + "</strong></p>");
-            out.println("<form method='post' action='/cart/checkout'><button type='submit'>Checkout</button></form>");
+            out.println("<p style='text-align:center; font-size:18px; margin-top:20px;'><strong>Cart Total: ₹" + cartTotal + "</strong></p>");
+            out.println("<form method='post' action='/cart/checkout' style='text-align:center;'>");
+            out.println("<button type='submit'>Checkout</button></form>");
         }
 
         out.println("</div></body></html>");
