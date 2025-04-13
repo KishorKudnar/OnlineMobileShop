@@ -11,7 +11,6 @@ import org.hibernate.Session;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
-
 @WebServlet("/orders/*")
 public class OrderServlet extends HttpServlet {
 
@@ -28,13 +27,28 @@ public class OrderServlet extends HttpServlet {
         }
 
         out.println("<html><head><title>Online Mobile Shop - Orders</title>");
-        out.println("<link rel='stylesheet' href='/style.css'></head><body>");
+        out.println("<link rel='stylesheet' href='/style.css'>");
+        out.println("<style>");
+        out.println("body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; }");
+        out.println("header { background-color: #333; padding: 15px 0; text-align: center; color: white; }");
+        out.println("nav ul { list-style: none; display: flex; justify-content: center; padding: 0; margin: 0; }");
+        out.println("nav li { margin: 0 10px; }");
+        out.println("nav a { color: white; text-decoration: none; background-color: #444; padding: 10px 20px; border-radius: 5px; }");
+        out.println("nav a:hover { background-color: #2980b9; }");
+        out.println(".container { max-width: 1000px; margin: 30px auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }");
+        out.println("h1 { text-align: center; color: #2c3e50; }");
+        out.println(".order-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }");
+        out.println(".order-card { background-color: #ecf0f1; padding: 15px 20px; border-radius: 8px; box-shadow: 0px 2px 5px rgba(0,0,0,0.1); }");
+        out.println(".order-card h3 { color: #34495e; margin-top: 0; }");
+        out.println(".order-card p { margin: 5px 0; color: #555; }");
+        out.println("a { color: #2980b9; text-decoration: none; }");
+        out.println("a:hover { text-decoration: underline; }");
+        out.println("</style></head><body>");
+
         out.println("<header><nav>" + getNavBar(user) + "</nav></header>");
         out.println("<div class='container'><h1>Your Orders</h1>");
 
         try (Session dbSession = HibernateUtil.getSessionFactory().openSession()) {
-
-            // Fetch orders of logged-in user
             List<Order> orders = dbSession.createQuery(
                     "FROM Order o WHERE o.user.userId = :userId", Order.class)
                     .setParameter("userId", user.getUserId())
@@ -55,13 +69,13 @@ public class OrderServlet extends HttpServlet {
                             .list();
 
                     for (OrderItem item : orderItems) {
-                        out.println("<p>Mobile: " + item.getMobile().getName() +
-                                " | Quantity: " + item.getQuantity() +
-                                " | Price: ₹" + item.getUnitPrice() + "</p>");
+                        out.println("<p>📱 " + item.getMobile().getName() +
+                                " | Qty: " + item.getQuantity() +
+                                " | ₹" + item.getUnitPrice() + "</p>");
                     }
 
-                    out.println("<p>Total Amount: ₹" + order.getTotalAmount() + "</p>");
-                    out.println("<p>Status: " + order.getStatus() + "</p>");
+                    out.println("<p><strong>Total: ₹" + order.getTotalAmount() + "</strong></p>");
+                    out.println("<p>Status: <em>" + order.getStatus() + "</em></p>");
                     out.println("</div>");
                 }
                 out.println("</div>");
@@ -71,6 +85,7 @@ public class OrderServlet extends HttpServlet {
             out.println("<h1>Error</h1><p>Failed to load orders: " + e.getMessage() + "</p>");
             e.printStackTrace();
         }
+
         out.println("</div></body></html>");
     }
 
